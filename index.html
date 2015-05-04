@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JSSample</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href='https://fonts.googleapis.com/css?family=RobotoDraft:regular,bold,thin,light,mediumn' rel='stylesheet' type='text/css'>
+<style>
+
+html, body {
+  height: 100%;
+  margin: 0;
+    background-color: #EEEEEE;
+  font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border: 0;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-font-smoothing: antialiased;
+  color: #212121;
+}
+
+header {
+	background-color: #00BCD4;
+  position: relative;
+  z-index: 1;
+}
+
+h1 {
+font-size: 24px;
+  font-weight: 300;
+  max-width: 896px;
+  margin: 0 auto;
+  text-align: center;
+  height: 168px;
+  line-height: 168px;
+  color: #fff;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+ }
+
+canvas {
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+ }
+
+.video {
+  background: #FAFAFA;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26), 0 2px 10px 0 rgba(0, 0, 0, 0.16);
+  border-radius: 2px;
+  position: relative;
+  z-index: 2;
+  margin-top: -64px;
+  display: block;
+  margin: -54px 16px;
+
+}
+
+.fab {
+width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26), 0 2px 10px 0 rgba(0, 0, 0, 0.16);
+  position: absolute;
+    bottom: -28px;
+  right: 24px;
+  z-index: 6;
+  background-color: #ECFF40;
+  will-change: transform;
+  line-height: 0;
+  font-size: 0;
+  color: transparent;
+    fill: #727272;
+	cursor: pointer;
+	z-index: 6;
+}
+
+.paper__info-panel {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background-color: #FAFAFA;
+}
+
+.hero__panel {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+    border-radius: 2px;
+display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  
+}
+.hero__icon {
+  width: 56px;
+  height: 56px;
+  position: absolute;
+  top: calc(50% - 28px);
+  left: calc(50% - 28px);
+  background-color: #ECFF40;
+  border-radius: 50%;
+  z-index: 7;
+  opacity: 0;
+  -webkit-transform: scale(0);
+  -moz-transform: scale(0);
+ -ms-transform: scale(0);
+  -o-transform: scale(0);
+  transform: scale(0);
+}
+.hero__loader {
+	opacity: 0;
+}
+.actions {
+	padding: 16px;
+max-width: 640px;
+  margin: 0 auto;
+}
+.action {
+  display: inline-block;
+  text-transform: uppercase;
+  font-family: 'RobotoDraft';
+  font-size: 14px;
+  font-weight: 400;
+  background-color: #FF5252;
+  color: #fff;
+  border-radius: 2px;
+  min-width: 88px;
+  height: 36px;
+  padding-left: 8px;
+  padding-right: 8px;
+  line-height: 36px;
+  border: 0;
+  cursor: pointer;
+  text-align: center;
+  -webkit-appearance: none;
+    text-decoration: none;
+margin-right: 8px;
+
+}
+
+.spinner {
+  -webkit-animation: rotator 1.4s linear infinite;
+          animation: rotator 1.4s linear infinite;
+}
+
+@-webkit-keyframes rotator {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(270deg);
+            transform: rotate(270deg);
+  }
+}
+
+@keyframes rotator {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(270deg);
+            transform: rotate(270deg);
+  }
+}
+.path {
+  stroke-dasharray: 187;
+  stroke-dashoffset: 0;
+  -webkit-transform-origin: center;
+      -ms-transform-origin: center;
+          transform-origin: center;
+  -webkit-animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
+          animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
+}
+
+@-webkit-keyframes colors {
+  0% {
+    stroke: #4285F4;
+  }
+  25% {
+    stroke: #DE3E35;
+  }
+  50% {
+    stroke: #F7C223;
+  }
+  75% {
+    stroke: #1B9A59;
+  }
+  100% {
+    stroke: #4285F4;
+  }
+}
+
+@keyframes colors {
+  0% {
+    stroke: #4285F4;
+  }
+  25% {
+    stroke: #DE3E35;
+  }
+  50% {
+    stroke: #F7C223;
+  }
+  75% {
+    stroke: #1B9A59;
+  }
+  100% {
+    stroke: #4285F4;
+  }
+}
+@-webkit-keyframes dash {
+  0% {
+    stroke-dashoffset: 187;
+  }
+  50% {
+    stroke-dashoffset: 46.75;
+    -webkit-transform: rotate(135deg);
+            transform: rotate(135deg);
+  }
+  100% {
+    stroke-dashoffset: 187;
+    -webkit-transform: rotate(450deg);
+            transform: rotate(450deg);
+  }
+}
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 187;
+  }
+  50% {
+    stroke-dashoffset: 46.75;
+    -webkit-transform: rotate(135deg);
+            transform: rotate(135deg);
+  }
+  100% {
+    stroke-dashoffset: 187;
+    -webkit-transform: rotate(450deg);
+            transform: rotate(450deg);
+  }
+}
+
+@media (min-width: 688px) {
+	.video {
+		max-width: 640px;
+		margin: -64px auto;
+	}
+	
+	h1 {
+		height: 256px;
+		  line-height: 256px;
+		  font-size: 34px;
+	}
+	
+}
+
+
+</style>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script type="text/javascript" src="paperCapabilities.js"></script>
+<script type="text/javascript" src="paper-transition.js"></script>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+</head>
+<body>
+
+<header>
+<h1>How Old Do I Look?</h1>
+</header>
+
+<div class="video">
+	<div id="heroPanel" class="hero__panel">
+		
+		<svg id="heroLoader" class="hero__loader spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+           <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+        </svg>
+        
+        <div id="heroIcon" class="hero__icon"></div>
+
+    </div>
+    
+	<video id="video" autoplay ></video>
+    <canvas id="canvas"></canvas>
+	<button class="fab" id="snap">
+		Snap
+		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3.2"/>
+            <path d="M9 2l-1.83 2h-3.17c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-12c0-1.1-.9-2-2-2h-3.17l-1.83-2h-6zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+            <path d="M0 0h24v24h-24z" fill="none"/>
+        </svg>
+	</button>
+</div>
+
+<div class="actions">
+    <a class="action " href="https://twitter.com/share" class="twitter-share-button" data-url="http://some.com" data-hashtags="myAge" data-dnt="true">Tweet</a>
+    <button class="action share">Try again</button>
+    <button class="action new">Try again</button>
+</div>
+
+<script>
+
+var canvas = document.getElementById("canvas"),
+	context = canvas.getContext("2d"),
+	button = document.getElementById("snap"),
+	video = document.getElementById("video"),
+	videoContainer = document.querySelector('.video'),
+	heroPanel = document.getElementById("heroPanel"),
+	heroIcon = document.getElementById("heroIcon"),
+	heroLoader = document.getElementById("heroLoader"),
+	actions = document.querySelector('.actions'),
+	shareButton = document.querySelector('.share')
+
+var imageUrl;
+
+
+videoContainer.style.height = videoContainer.offsetWidth / 1.33333 + 'px'
+
+
+var videoObj = {
+		"video": {
+			mandatory: {
+				"minWidth": "640",
+				"minHeight": "480",
+				"minAspectRatio": "1.333",
+				"maxWidth": "640",
+				"maxHeight": "480",
+				"maxAspectRatio": "1.333"
+			}
+		}
+	},
+	errBack = function(error) {
+		console.log("Video capture error: ", error.code);
+	};
+
+// Put video listeners into place
+if (navigator.getUserMedia) { // Standard
+	navigator.getUserMedia(videoObj, function(stream) {
+		video.src = stream;
+		video.play();
+	}, errBack);
+} else if (navigator.webkitGetUserMedia) { // WebKit-prefixed
+	navigator.webkitGetUserMedia(videoObj, function(stream) {
+		video.src = window.webkitURL.createObjectURL(stream);
+		video.play();
+	}, errBack);
+}
+
+var down
+
+if ("ontouchstart" in window) {
+	down = 'touchstart';
+} else {
+	down = 'mousedown';
+}
+
+// Trigger photo take
+button.addEventListener(down, function() {
+
+	showHero();
+
+	var box = canvas.getBoundingClientRect()
+	canvas.width = box.width;
+	canvas.height = box.height;
+	context.drawImage(video, 0, 0, box.width, box.height);
+	getBase();
+});
+
+
+
+function getBase() {
+
+	var imgBase = canvas.toDataURL("image/png");
+
+	var http = new XMLHttpRequest();
+	var url = "hidden.php";
+	var params = "userid=" + imgBase;
+	http.open("POST", url, true);
+
+	//Send the proper header information along with the request
+	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	http.onreadystatechange = function() { //Call a function when the state changes.
+		if (http.readyState == 4 && http.status == 200) {
+			imageUrl = http.responseText
+			getFace(imageUrl)
+		}
+	}
+
+	http.send(params);
+}
+
+function getFace(imageUrl) {
+
+	var params = {
+		'subscription-key': '5264c3aefa094ba4808f236f191cc02d',
+		analyzesFaceLandmarks: "true",
+		analyzesAge: "true",
+		analyzesGender: "true",
+		analyzesHeadPose: "true",
+	};
+
+	var http = new XMLHttpRequest();
+	var url = 'https://api.projectoxford.ai/face/v0/detections?' + $.param(params);
+
+	http.open("POST", url, true);
+	http.setRequestHeader('Content-type', 'application/json');
+	http.onreadystatechange = function() {
+		if (http.readyState == 4 && http.status == 200) {
+			draw(JSON.parse(http.response));
+			clear()
+		}
+	}
+
+	http.send("{'url': 'http://typefolly.com/how-old/" + imageUrl + "'}");
+}
+
+function draw(data) {
+
+	console.log('Face API', data)
+
+	hideHero();
+
+	var i = 0,
+		il = data.length
+
+	for (; i < il; i += 1) {
+
+		var face = data[i],
+			faceRectangle = face.faceRectangle,
+			age = face.attributes.age,
+			top = faceRectangle.top - 16
+
+		context.rect(faceRectangle.left, faceRectangle.top, faceRectangle.width, faceRectangle.height);
+		context.strokeStyle = 'rgba(255, 255, 255, .6)';
+		context.lineWidth = 2;
+		context.stroke();
+
+		context.font = "24px RobotoDraft";
+
+		var textMetrics = context.measureText(age)
+		context.fillStyle = "#00BCD4";
+		context.fillRect(faceRectangle.left, top - textMetrics.actualBoundingBoxAscent - 8, textMetrics.width + 16, textMetrics.fontBoundingBoxAscent + 8);
+
+		context.fillStyle = "#fff";
+		context.fillText(age, faceRectangle.left + 8, top);
+	}
+}
+
+function clear() {
+
+	var http = new XMLHttpRequest();
+	var url = "delete.php";
+	var params = "filename=" + imageUrl;
+	http.open("POST", url, true);
+
+	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	http.onreadystatechange = function() { //Call a function when the state changes.
+		if (http.readyState == 4 && http.status == 200) {
+			//	console.log('file removed')
+		}
+	}
+
+	http.send(params);
+}
+
+
+function showHero() {
+
+	var hero = video,
+		hero__icon = heroIcon,
+		mark = button;
+
+	heroIcon.style.opacity = 1;
+
+	var iconRect = hero__icon.getBoundingClientRect(),
+		markRect = mark.getBoundingClientRect(),
+		heroRect = hero.getBoundingClientRect();
+
+	console.log(iconRect.top)
+
+	var targetRect = {
+		left: iconRect.left + (markRect.left - iconRect.left),
+		top: iconRect.top + 0 + (heroRect.bottom - iconRect.bottom)
+	};
+
+	var v1 = [targetRect.left, targetRect.top],
+		v2 = [iconRect.left, iconRect.top],
+		deltaY = v2[1] - v1[1],
+		deltaX = v2[0] - v1[0],
+
+		angleInDegrees = Math.atan2(deltaY, deltaX) * 180 / Math.PI,
+		w = targetRect.left - iconRect.left,
+		l = targetRect.top - iconRect.top,
+		d = Math.sqrt(w * w + l * l);
+
+	var rotation = angleInDegrees,
+		compensation = -rotation,
+		x = -d,
+		y = 0,
+		r2 = 0
+
+	if (iconRect.left < targetRect.left && iconRect.top < targetRect.top) {
+
+		if (w < l) {
+
+			rotation = angleInDegrees + 90;
+			x = 0;
+			y = d;
+
+		} else {
+
+			r2 = angleInDegrees + (180 + angleInDegrees)
+		}
+
+	} else if (iconRect.left < targetRect.left && iconRect.top > targetRect.top) {
+		r2 = 90;
+
+	} else if (iconRect.left > targetRect.left && iconRect.top < targetRect.top) {
+
+		if (Math.abs(w) < Math.abs(l)) {
+
+			rotation = angleInDegrees + 90;
+			x = 0;
+			y = d;
+
+		} else {
+
+			r2 = angleInDegrees * 2;
+		}
+	}
+
+	compensation = -rotation;
+
+	button.style[paper.capabilities.transform] = 'scale(0)';
+
+	//	hero__icon.style.transform = 'rotate(' + rotation + 'deg)' + 'translateX(' + x + 'px)' + 'translateY(' + y + 'px)' + 'rotate(' + compensation + 'deg)'
+	//	return
+
+	paper.transition(hero__icon, [{
+		transform: 'rotate(' + rotation + 'deg)' + 'translateX(' + x + 'px)' + 'translateY(' + y + 'px)' + 'rotate(' + compensation + 'deg)',
+	}, {
+		transform: 'rotate(' + r2 + 'deg) translateX(0px) translateY(0px) rotate(' + -r2 + 'deg)'
+	}], {
+		duration: 300,
+		easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+		delay: 0,
+
+	}).onfinish = function() {
+
+		loadingPanel();
+	}
+}
+
+function loadingPanel() {
+
+	heroPanel.style.overflow = 'hidden';
+
+	paper.transition(heroIcon, [{
+		transform: 'scale(1)',
+	}, {
+		transform: 'scale(15)'
+	}], {
+		duration: 300,
+		easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+	}).onfinish = function() {
+
+		heroLoader.style.opacity = 1
+	}
+}
+
+function hideHero() {
+
+	heroLoader.style.opacity = 0;
+	canvas.style.display = 'block';
+	canvas.style.opacity = 1;
+	heroIcon.style.opacity = 1;
+
+
+	paper.transition(heroIcon, [{
+		transform: 'scale(15)',
+	}, {
+		transform: 'scale(0)'
+	}], {
+		duration: 300,
+		easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+	})
+
+	paper.transition(actions, [{
+		transform: 'translateY(0px)'
+	}, {
+		transform: 'translateY(64px)'
+	}], {
+		duration: 200,
+		easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+		delay: 320
+	})
+}
+
+
+document.querySelector('.new').addEventListener(down, function() {
+
+	canvas.style.opacity = 0;
+	context.clearRect(0, 0, canvas.width, canvas.height);
+	heroPanel.style.overflow = 'visible'
+
+	paper.transition(actions, [{
+		transform: 'translateY(65px)'
+	}, {
+		transform: 'translateY(0px)'
+	}], {
+		duration: 200,
+		easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+	})
+
+	paper.transition(button, [{
+		transform: 'scale(0)',
+	}, {
+		transform: 'scale(1)'
+	}], {
+		duration: 300,
+		easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+	})
+}, false);
+
+shareButton.addEventListener(down, function() {
+
+	var imgBase = canvas.toDataURL("image/png");
+
+	var http = new XMLHttpRequest();
+	var url = "hidden.php";
+	var params = "userid=" + imgBase;
+	http.open("POST", url, true);
+
+	//Send the proper header information along with the request
+	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	http.onreadystatechange = function() { //Call a function when the state changes.
+		if (http.readyState == 4 && http.status == 200) {
+			imageUrl = http.responseText;
+
+
+
+			//https://twitter.com/intent/tweet?hashtags=HowOldNet&original_referer=https%3A%2F%2Fabout.twitter.com%2Fresources%2Fbuttons&text=Check%20out&tw_p=tweetbutton&url=http%3A%2F%2Fsomeurl.com
+			//https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fhow-old.net%2F&text=The%20%23HowOldRobot%20guesses%20how%20old%20you%20look%20using%20Machine%20Learning.&tw_p=tweetbutton&url=http%3A%2F%2Fhow-old.net
+
+			var str = 'https://twitter.com/intent/tweet?hashtags=HowOldNet&original_referer=' + encodeURIComponent('http://typefolly.com/how-old/azure.html') + '&text=' + encodeURIComponent('Take your picture and get your age online') + '&url=' + encodeURIComponent('http://typefolly.com/how-old/' + imageUrl)
+			console.log('shared', str)
+
+			document.location = str;
+		}
+	}
+
+	http.send(params);
+
+
+}, false);
+
+</script>
+</body>
+</html>
